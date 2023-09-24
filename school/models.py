@@ -17,6 +17,7 @@ class Kurs(models.Model):
 
 
 class Lesson(models.Model):
+    kurs = models.ForeignKey('Kurs', on_delete=models.CASCADE, **NULLABLE)
     title = models.CharField(max_length=150, verbose_name='Название')
     description = models.TextField(verbose_name='Описание', **NULLABLE)
     intro = models.ImageField(upload_to='img/', verbose_name='Превью', **NULLABLE)
@@ -28,3 +29,14 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = 'Урок'
         verbose_name_plural = 'Уроки'
+
+
+class Payments(models.Model):
+    kurs = models.ForeignKey('Kurs', on_delete=models.CASCADE, null=True, blank=True)
+    lesson = models.ForeignKey('Lesson', on_delete=models.CASCADE, null=True, blank=True)
+
+    METHOD = [('card', 'картой'), ('cash', 'наличными')]
+    user = models.CharField(max_length=150, verbose_name='плательщик')
+    date = models.DateField(verbose_name='дата оплаты')
+    pay = models.PositiveIntegerField(verbose_name='сумма оплаты')
+    payment_method = models.CharField(max_length=4, choices=METHOD, default='card')

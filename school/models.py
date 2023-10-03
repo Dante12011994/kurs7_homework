@@ -1,5 +1,7 @@
 from django.db import models
 
+from config import settings
+
 NULLABLE = {'blank': True, 'null': True}
 
 
@@ -7,6 +9,7 @@ class Kurs(models.Model):
     title = models.CharField(max_length=150, verbose_name='Название')
     intro = models.ImageField(upload_to='img/', verbose_name='Превью', **NULLABLE)
     description = models.TextField(verbose_name='Описание', **NULLABLE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE)
 
     def __str__(self):
         return self.title
@@ -22,6 +25,7 @@ class Lesson(models.Model):
     description = models.TextField(verbose_name='Описание', **NULLABLE)
     intro = models.ImageField(upload_to='img/', verbose_name='Превью', **NULLABLE)
     video = models.URLField(verbose_name='ссылка на видео', **NULLABLE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE)
 
     def __str__(self):
         return self.title
@@ -36,7 +40,7 @@ class Payments(models.Model):
     lesson = models.ForeignKey('Lesson', on_delete=models.CASCADE, null=True, blank=True)
 
     METHOD = [('card', 'картой'), ('cash', 'наличными')]
-    user = models.CharField(max_length=150, verbose_name='плательщик')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE)
     date = models.DateField(verbose_name='дата оплаты')
     pay = models.PositiveIntegerField(verbose_name='сумма оплаты')
     payment_method = models.CharField(max_length=4, choices=METHOD, default='card')

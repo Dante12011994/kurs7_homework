@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from school.models import Kurs, Lesson, Payments
+from school.validators import LinkValidator
 
 
 # Сериалайзер для модели уроков
@@ -8,6 +9,9 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = "__all__"
+        validators = [
+            LinkValidator(field='link')
+        ]
 
 
 # Сериалайзер для модели курсов
@@ -18,6 +22,9 @@ class KursSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kurs
         fields = "__all__"
+        validators = [
+            LinkValidator(field='link')
+        ]
 
     # Метод для вывода списка уроков
     def get_lessons(self, instance):

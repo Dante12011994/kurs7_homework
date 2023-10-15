@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from school.models import Kurs, Lesson, Payments
 from school.permissions import IsModerator, IsOwnerOrModerator
-from school.serializers import KursSerializer, LessonSerializer, PaymentsSerializer
+from school.serializers import KursSerializer, LessonSerializer, PaymentsSerializer, SubscriptionSerializer
 
 
 # ViewSet для Курсов
@@ -29,21 +29,21 @@ class KursCreateAPIView(generics.CreateAPIView):
 
 # Просмотр всего списка курсов
 class KursListAPIView(generics.ListAPIView):
-    serializer_class = LessonSerializer
+    serializer_class = KursSerializer
     queryset = Kurs.objects.all()
     permission_classes = [IsAuthenticated]
 
 
 # Просмотр информации об одном курсе
 class KursRetrieveAPIView(generics.RetrieveAPIView):
-    serializer_class = LessonSerializer
+    serializer_class = KursSerializer
     queryset = Kurs.objects.all()
-    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
+    permission_classes = [IsAuthenticated]
 
 
 # Внесение изменений в курс
 class KursUpdateAPIView(generics.UpdateAPIView):
-    serializer_class = LessonSerializer
+    serializer_class = KursSerializer
     queryset = Kurs.objects.all()
     permission_classes = [IsAuthenticated, IsOwnerOrModerator]
 
@@ -108,6 +108,19 @@ class PaymentsListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsModerator]
 
 
+# Удаление платежа
 class PaymentsDestroyAPIView(generics.DestroyAPIView):
     queryset = Payments.objects.all()
     permission_classes = [IsAuthenticated, IsModerator]
+
+
+# Создание подписки
+class SubscriptionCreateApiView(generics.CreateAPIView):
+    serializer_class = SubscriptionSerializer
+    permission_classes = [IsAuthenticated]
+
+
+# Удаление подписки
+class SubscriptionDestroyAPIView(generics.DestroyAPIView):
+    serializer_class = SubscriptionSerializer
+    permission_classes = [IsAuthenticated]

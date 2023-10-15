@@ -5,6 +5,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 
 from school.models import Kurs, Lesson, Payments
+from school.paginators import SchoolPaginator
 from school.permissions import IsModerator, IsOwnerOrModerator
 from school.serializers import KursSerializer, LessonSerializer, PaymentsSerializer, SubscriptionSerializer
 
@@ -32,6 +33,7 @@ class KursListAPIView(generics.ListAPIView):
     serializer_class = KursSerializer
     queryset = Kurs.objects.all()
     permission_classes = [IsAuthenticated]
+    pagination_class = SchoolPaginator
 
 
 # Просмотр информации об одном курсе
@@ -70,6 +72,7 @@ class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated]
+    pagination_class = SchoolPaginator
 
 
 # Просмотр информации об одном уроке

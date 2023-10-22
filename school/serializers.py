@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from school.models import Kurs, Lesson, Payments, Subscription
+from school.servises import creates_payment_intent, retrieve_payment_intent
 from school.validators import LinkValidator
 
 
@@ -49,6 +50,23 @@ class KursSerializer(serializers.ModelSerializer):
 
 # Сериалайзер для модели платежей
 class PaymentsSerializer(serializers.ModelSerializer):
+    payment_stripe = serializers.SerializerMethodField(read_only=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.request = kwargs.get('context').get('request')
+
+    def get_payment_stripe(self, instance):
+        if self.request.stream.method == 'POST':
+            stripe_id = creates_payment_intent(int(instance.amount))
+            obj_payments = Payments.objects.get(id=instance.id)
+            obj_payments.stripe_id = stripe_id
+            obj_payments.save()
+            return retrieve_payment_intent(stripe_id)
+        if self.request.stream.method == 'GET':
+            if not instance.stripe_id:
+                return None
+            return retrieve_payment_intent(instance.stripe_id)
     class Meta:
         model = Payments
         fields = "__all__"

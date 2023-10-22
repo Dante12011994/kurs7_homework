@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'users',
     'school',
     'django_filters',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -138,3 +139,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ]
 }
+
+STRIPE_API_KEY = 'sk_test_51O3ypJIUSmjyqagRhldVctmZzy4C0EOygPavvcK5LMwbasgvnIK0xLxdPlR7CRVWk0iIVpaLSHYrCj0DVmy0BS0o00UMeVRTQD'

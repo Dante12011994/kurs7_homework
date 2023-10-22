@@ -45,6 +45,7 @@ class Payments(models.Model):
     date = models.DateField(verbose_name='дата оплаты')
     pay = models.PositiveIntegerField(verbose_name='сумма оплаты')
     payment_method = models.CharField(max_length=4, choices=METHOD, default='card')
+    stripe_id = models.CharField(max_length=255, verbose_name='id платежа на stripe', **NULLABLE)
 
 
 class Subscription(models.Model):

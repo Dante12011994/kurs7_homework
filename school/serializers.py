@@ -67,6 +67,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
             if not instance.stripe_id:
                 return None
             return retrieve_payment_intent(instance.stripe_id)
+
     class Meta:
         model = Payments
         fields = "__all__"

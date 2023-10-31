@@ -8,6 +8,7 @@ from school.models import Kurs, Lesson, Payments
 from school.paginators import SchoolPaginator
 from school.permissions import IsModerator, IsOwnerOrModerator
 from school.serializers import KursSerializer, LessonSerializer, PaymentsSerializer, SubscriptionSerializer
+from school.tasks import send_update
 
 
 # ViewSet для Курсов
@@ -48,6 +49,13 @@ class KursUpdateAPIView(generics.UpdateAPIView):
     serializer_class = KursSerializer
     queryset = Kurs.objects.all()
     permission_classes = [IsAuthenticated, IsOwnerOrModerator]
+
+    def perform_update(self, serializer):
+        new_lesson = serializer.save()
+        new_lesson.owner = self.request.user
+        new_lesson.save()
+        if new_lesson:
+            send_update.delay(new_lesson.course.id)
 
 
 # Удаление курса

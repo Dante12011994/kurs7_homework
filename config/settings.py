@@ -81,8 +81,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'drf_homework',
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'USER': 'postgres',
+        'PASSWORD': 'mysecretpassword',
+        'HOST': 'db',
+        'PORT': '5432'
     }
 }
 
@@ -144,9 +146,9 @@ REST_FRAMEWORK = {
 
 STRIPE_API_KEY = 'sk_test_51O3ypJIUSmjyqagRhldVctmZzy4C0EOygPavvcK5LMwbasgvnIK0xLxdPlR7CRVWk0iIVpaLSHYrCj0DVmy0BS0o00UMeVRTQD'
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
 
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 CELERY_TIMEZONE = "Australia/Tasmania"
 
